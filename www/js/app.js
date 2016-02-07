@@ -19,7 +19,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/');
 });
 
-app.controller('LoginCtrl', function($scope, $state, $ionicHistory, User) {
+app.controller('LoginCtrl', function($scope, $state, $ionicHistory, $ionicPopup, User) {
 
   $scope.credentials = {
     user: '',
@@ -28,11 +28,15 @@ app.controller('LoginCtrl', function($scope, $state, $ionicHistory, User) {
 
   $scope.login = function() {
     User.login($scope.credentials, function(response){
-        
         if (response) {
-            
+            console.log(response);
+            $state.go('app.playlists');
         } else {
-            
+            var alertPopup = $ionicPopup.alert({
+                title: 'Ops!',
+                template: 'Usuario o contraseña incorrecta'
+            });
+            alertPopup.then();
         }
         
     });
