@@ -1,5 +1,5 @@
 angular.module('events.user', [])
-	.factory('User', function($http) {
+	.factory('User', function($http,  $cookieStore, $rootScope) {
 
 		var apiUrl = 'http://localhost/eventos/api/users/user';
   
@@ -16,6 +16,17 @@ angular.module('events.user', [])
 				return $http.get(apiUrl, header)
                 .success(function(data){
 				    $http.defaults.headers.common.Authorization = 'Basic ' + auth;
+                    
+                    $rootScope.globals = {
+                        currentUser: {
+                            username: data.us_username,
+                            name: data.us_first_name + " " + data.us_last_name,
+                            image: data.us_avatar,
+                            authdata: auth,
+                        }
+                    };
+                    
+                    $cookieStore.put('globals', $rootScope.globals);
 					loggedIn = true;
                     callback(data);
                 }).error(function(){

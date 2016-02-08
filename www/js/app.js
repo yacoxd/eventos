@@ -1,6 +1,6 @@
 (function() {
 
-var app = angular.module('events', ['ionic', 'events.user']);
+var app = angular.module('events', ['ionic', 'events.user', 'ngRoute', 'ngCookies']);
 
 app.config(function($stateProvider, $urlRouterProvider) {
 
@@ -9,18 +9,29 @@ app.config(function($stateProvider, $urlRouterProvider) {
     templateUrl: 'templates/login.html',
     controller: 'LoginCtrl'
   });
+  
+   $stateProvider.state('menu', {
+      url: '/side-menu',
+      abstract:true,
+      templateUrl: 'templates/menu.html'
+    });
 
-  $stateProvider.state('list', {
-    url: '/',
-    templateUrl: 'templates/events.html',
-    cache: false
-  });
+  $stateProvider.state('menu.list', {
+      url: '/list',
+      cache: false,
+      views: {
+        'side-menu': {
+          templateUrl: 'templates/eventos.html',
+          controller: 'ListCtrl'
+        }
+      }
+    })
 
-  $urlRouterProvider.otherwise('/');
+  $urlRouterProvider.otherwise('/login');
 });
 
 app.controller('LoginCtrl', function($scope, $state, $ionicHistory, $ionicPopup, User) {
-
+    
   $scope.credentials = {
     user: '',
     password: ''
@@ -30,7 +41,8 @@ app.controller('LoginCtrl', function($scope, $state, $ionicHistory, $ionicPopup,
     User.login($scope.credentials, function(response){
         if (response) {
             console.log(response);
-            $state.go('app.playlists');
+            $ionicHistory.nextViewOptions({historyRoot: true});    
+            $state.go('menu.list');
         } else {
             var alertPopup = $ionicPopup.alert({
                 title: 'Ops!',
@@ -44,22 +56,18 @@ app.controller('LoginCtrl', function($scope, $state, $ionicHistory, $ionicPopup,
 
 });
 
-app.controller('ListCtrl', function($scope, NoteStore) {
-
-  function refreshNotes() {
-    NoteStore.list().then(function(notes) {
-      $scope.notes = notes;
-    });
-  }
-  refreshNotes();
-
-  $scope.remove = function(noteId) {
-    NoteStore.remove(noteId).then(refreshNotes);
-  };
-
+app.controller('ListCtrl', function($scope) {
+    console.log("aca");
 });
 
-app.run(function($rootScope, $state, $ionicPlatform, User) {
+app.run(function($rootScope, $state, $ionicPlatform, $cookieStore, $http, User) {
+    
+  $rootScope.globals = $cookieStore.get('globals') || {};
+  if ($rootScope.globals.currentUser) {
+         //$http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata; // jshint ignore:line
+         $http.defaults.headers.common.Authorization = 'Basic ' + $rootScope.globals.currentUser.authdata;
+  }
+    
   $rootScope.$on('$stateChangeStart', function(event, toState) {
 
     if (!User.isLoggedIn() && toState.name !== 'login') {
