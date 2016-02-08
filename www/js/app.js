@@ -25,7 +25,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
           controller: 'ListCtrl'
         }
       }
-    })
+    });
 
   $urlRouterProvider.otherwise('/login');
 });
@@ -57,24 +57,23 @@ app.controller('LoginCtrl', function($scope, $state, $ionicHistory, $ionicPopup,
 });
 
 app.controller('ListCtrl', function($scope) {
-    console.log("aca");
+    $rootScope.globals = $cookieStore.get('globals') || {};
+    
+    
 });
 
 app.run(function($rootScope, $state, $ionicPlatform, $cookieStore, $http, User) {
     
   $rootScope.globals = $cookieStore.get('globals') || {};
   if ($rootScope.globals.currentUser) {
-         //$http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata; // jshint ignore:line
          $http.defaults.headers.common.Authorization = 'Basic ' + $rootScope.globals.currentUser.authdata;
   }
     
   $rootScope.$on('$stateChangeStart', function(event, toState) {
-
     if (!User.isLoggedIn() && toState.name !== 'login') {
       event.preventDefault();
       $state.go('login');
     }
-
   });
 
   $ionicPlatform.ready(function() {
