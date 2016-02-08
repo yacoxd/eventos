@@ -15,9 +15,10 @@
         <ion-content padding="false" class="side-menu-left has-header" <="" ion-content="">
             <ion-list>
                 <ion-item class="item-thumbnail-left">
-                    <img src="img/NSeMrXTWQ46gfE7Nhvf0_IMG-20141010-WA0000.jpg">
-                    <h2>Abner Tellez</h2>
-                    <p>yacoxd</p>
+                    <img src="http://localhost/eventos/uploads/users/{{globals.currentUser.image}}">
+                    <div image-lazy-src="http://localhost/eventos/uploads/users/{{globals.currentUser.image}}" image-lazy-background-image="true"></div>
+                    <h2>{{globals.currentUser.name}}</h2>
+                    <p>{{globals.currentUser.username}}</p>
                 </ion-item>
                 <ion-item ui-sref="menu.list" menu-close="">Eventos</ion-item>
                 <ion-item>Perfil</ion-item>

@@ -56,8 +56,26 @@ app.controller('LoginCtrl', function($scope, $state, $ionicHistory, $ionicPopup,
 
 });
 
-app.controller('ListCtrl', function($scope) {
-    $rootScope.globals = $cookieStore.get('globals') || {};
+app.controller('ListCtrl', function($scope, $cookieStore, $http) {
+    //$scope.globals = $cookieStore.get('globals') || {};
+    
+    
+    $scope.events = [];
+    var apiUrl = 'http://localhost/eventos/api/events/all_events';
+    
+    $http.get(apiUrl)
+              .success(function(response){
+                  angular.forEach(response, function(child){
+                        $scope.events.push(child);     
+                      
+                  });
+                  
+                  console.log($scope.events);
+    });
+    
+    
+    
+    
     
     
 });
