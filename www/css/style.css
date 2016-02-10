@@ -1,1 +1,35 @@
 /* Empty. Add your own CSS if you like */
+.list:last-child.card{
+    margin-bottom:0px;
+}
+
+.list .item-body{
+    text-align: justify;
+}
+
+.list .item-body p{
+    text-overflow: ellipsis;    
+}
+
+.menu .item{
+    background: #444;
+    color: #FFF;
+}
+
+.menu .item h2, .menu .item p{
+    color: #fff; 
+}
+
+.menu .item.item-complex a{
+    background:  #444;
+    color: #FFF;
+}
+
+.menu .scroll{
+    background:  #444;
+    color: #FFF;
+    }
+
+.time-icon{
+    font-size: 10px;
+}

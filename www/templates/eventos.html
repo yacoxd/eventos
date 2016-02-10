@@ -1,22 +1,24 @@
 <ion-view title="Eventos">
     <ion-content ng-controller="ListCtrl" overflow-scroll="true" padding="true" class="has-header">
+       
        <ion-list ng-repeat="event in events">
-            <div class="list card">
-            <div class="item item-avatar">
-                <img src="avatar.jpg">
-                <h2>{{event.info.ev_title}}</h2>
-                <p>Nine Inch Nails</p>
-            </div>
+        <div class="list card">     
+                <div class="item">
+                    <h2>{{event.info.ev_title}}</h2>
+                    <h3 class="item-icon-left"><i class="icon ion-person time-icon"></i>{{event.info.ev_date_time}}</h3>
+                </div>
 
-            <div class="item item-image">
-                <img src="cover.jpg">
+            <div class="item item-image item-body">
+                <img src="{{event.image[0]}}">
+                <p>
+                {{event.info.ev_short_description}}
+                </p>
             </div>
-
-            <a class="item item-icon-left assertive" href="#">
-                <i class="icon ion-music-note"></i>
-                Start listening
+            <a class="item item-icon-left dark" href="#">
+                <i class="icon ion-chevron-right"></i>
+                Detalles
             </a>
-            </div>
+            </div>    
         </ion-list>
     </ion-content>
 </ion-view>
