@@ -1,6 +1,6 @@
 /* Empty. Add your own CSS if you like */
 .list:last-child.card{
-    margin-bottom:0px;
+    margin-bottom:3px;
 }
 
 .list .item-body{
@@ -20,7 +20,8 @@
     color: #fff; 
 }
 
-.menu .item.item-complex a{
+.menu .item.item-complex a,
+.menu .scroll-content{
     background:  #444;
     color: #FFF;
 }
@@ -31,5 +32,18 @@
     }
 
 .time-icon{
-    font-size: 10px;
+    font-size: 18px;
+    margin-left: 5px;
+}
+
+.logo{
+    max-width: 250px;
+}
+
+.more-detail{
+    float: right;
+}
+
+.event-title{
+   background: #E6E6E6;
 }

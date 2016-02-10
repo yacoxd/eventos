@@ -3,9 +3,9 @@
        
        <ion-list ng-repeat="event in events">
         <div class="list card">     
-                <div class="item">
+                <div class="item event-title">
                     <h2>{{event.info.ev_title}}</h2>
-                    <h3 class="item-icon-left"><i class="icon ion-person time-icon"></i>{{event.info.ev_date_time}}</h3>
+                    <h3>{{event.date}} <i class="icon ion-clock time-icon"></i></h3>
                 </div>
 
             <div class="item item-image item-body">
@@ -14,11 +14,16 @@
                 {{event.info.ev_short_description}}
                 </p>
             </div>
-            <a class="item item-icon-left dark" href="#">
-                <i class="icon ion-chevron-right"></i>
+            <a class="item item-icon-left dark more-detail" href="#">
                 Detalles
+                <i class="icon ion-chevron-right"></i>
             </a>
             </div>    
         </ion-list>
+        <ion-infinite-scroll
+            on-infinite="loadMore()"
+            distance="1%">
+        </ion-infinite-scroll>
+        
     </ion-content>
 </ion-view>

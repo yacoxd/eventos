@@ -63,17 +63,35 @@ app.controller('ListCtrl', function($scope, $cookieStore, $http) {
     $scope.events = [];
     var apiUrl = 'http://localhost/eventos/api/events/all_events';
     
-    $http.get(apiUrl)
+   /* $http.get(apiUrl)
               .success(function(response){
                   angular.forEach(response, function(child){
                         $scope.events.push(child);     
-                      
                   });
-                  
-                  console.log($scope.events);
-    });
+    }); */
     
+     $scope.loadMore = function() {
+         
+         if($scope.events.length > 0){
+            var after = $scope.events[$scope.events.length -1].info.ev_id;
+            console.log($scope.events[$scope.events.length -1].info.ev_id);
+            apiUrl = 'http://localhost/eventos/api/events/all_events/after/' + after;
+          }
+                         
+            $http.get(apiUrl)
+              .success(function(response){
+                  angular.forEach(response, function(child){
+                        $scope.events.push(child);     
+                  });
+              $scope.$broadcast('scroll.infiniteScrollComplete');
+            }).error(function(){
+              $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
+    };
     
+    /*$scope.$on('$stateChangeSuccess', function() {
+        $scope.loadMore();
+    }); */
     
     
     
