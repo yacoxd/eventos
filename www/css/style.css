@@ -41,7 +41,22 @@
 }
 
 .more-detail{
+    width: 100%;
+    text-align: right;
+}
+
+.more-detail .participants{
+    float: left;
+    width: 50%;
+    padding-left: 35px;
+    text-align: left;
+}
+
+.more-detail .detail{
     float: right;
+    width: 50%;
+    padding-right: 35px;
+    text-align: right;
 }
 
 .event-title{

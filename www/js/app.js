@@ -74,7 +74,6 @@ app.controller('ListCtrl', function($scope, $cookieStore, $http) {
          
          if($scope.events.length > 0){
             var after = $scope.events[$scope.events.length -1].info.ev_id;
-            console.log($scope.events[$scope.events.length -1].info.ev_id);
             apiUrl = 'http://localhost/eventos/api/events/all_events/after/' + after;
           }
                          
@@ -83,8 +82,26 @@ app.controller('ListCtrl', function($scope, $cookieStore, $http) {
                   angular.forEach(response, function(child){
                         $scope.events.push(child);     
                   });
+            }).finally(function(){
               $scope.$broadcast('scroll.infiniteScrollComplete');
-            }).error(function(){
+            });
+    };
+    
+    $scope.doRefresh = function() {
+         
+         if($scope.events.length > 0){
+            var before = $scope.events[0].info.ev_id;
+            apiUrl = 'http://localhost/eventos/api/events/all_events/before/' + before;
+          }
+                         
+          $http.get(apiUrl)
+            .success(function(response){
+                var newEvents = [];
+                angular.forEach(response, function(child){
+                     newEvents.push(child);     
+                });
+                $scope.events = newEvents.concat($scope.events);
+            }).finally(function(){
               $scope.$broadcast('scroll.infiniteScrollComplete');
             });
     };

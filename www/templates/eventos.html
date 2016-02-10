@@ -1,6 +1,9 @@
 <ion-view title="Eventos">
     <ion-content ng-controller="ListCtrl" overflow-scroll="true" padding="true" class="has-header">
-       
+       <ion-refresher
+            pulling-text="Nuevos eventos ..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
        <ion-list ng-repeat="event in events">
         <div class="list card">     
                 <div class="item event-title">
@@ -14,15 +17,15 @@
                 {{event.info.ev_short_description}}
                 </p>
             </div>
-            <a class="item item-icon-left dark more-detail" href="#">
-                Detalles
-                <i class="icon ion-chevron-right"></i>
+            <a class="item  dark more-detail" href="#">
+                <div class="item-icon-left participants"><i class="icon ion-android-people"></i>{{event.total_assistants.total}}</div>
+                <div class="item-icon-right detail">Detalles<i class="icon ion-chevron-right"></i></div>
             </a>
             </div>    
         </ion-list>
         <ion-infinite-scroll
             on-infinite="loadMore()"
-            distance="1%">
+            distance="2%">
         </ion-infinite-scroll>
         
     </ion-content>
