@@ -62,3 +62,16 @@
 .event-title{
    background: #E6E6E6;
 }
+
+.back-button.hide{
+    display: block!important;
+}
+
+.back-button.hide .default-title{
+    display: none!important;
+}
+
+.platform-android .bar .title{
+    left: 0px!important;
+    text-align: center;
+}

@@ -9,7 +9,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     templateUrl: 'templates/login.html',
     controller: 'LoginCtrl'
   });
-  
+ 
    $stateProvider.state('menu', {
       url: '/side-menu',
       abstract:true,
@@ -18,7 +18,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
   $stateProvider.state('menu.list', {
       url: '/list',
-      cache: false,
+      
       views: {
         'side-menu': {
           templateUrl: 'templates/eventos.html',
@@ -26,6 +26,14 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
     });
+    
+      $stateProvider.state('detail', {
+        url: '/detail',
+        templateUrl: 'templates/detail.html',
+        controller: 'DetailCtrl'
+    }); 
+
+  
 
   $urlRouterProvider.otherwise('/login');
 });
@@ -40,7 +48,6 @@ app.controller('LoginCtrl', function($scope, $state, $ionicHistory, $ionicPopup,
   $scope.login = function() {
     User.login($scope.credentials, function(response){
         if (response) {
-            console.log(response);
             $ionicHistory.nextViewOptions({historyRoot: true});    
             $state.go('menu.list');
         } else {
@@ -56,19 +63,17 @@ app.controller('LoginCtrl', function($scope, $state, $ionicHistory, $ionicPopup,
 
 });
 
+app.controller('DetailCtrl', function($scope, $cookieStore, $http) {
+     
+    
+    
+    
+    
+});
+
 app.controller('ListCtrl', function($scope, $cookieStore, $http) {
-    //$scope.globals = $cookieStore.get('globals') || {};
-    
-    
     $scope.events = [];
     var apiUrl = 'http://localhost/eventos/api/events/all_events';
-    
-   /* $http.get(apiUrl)
-              .success(function(response){
-                  angular.forEach(response, function(child){
-                        $scope.events.push(child);     
-                  });
-    }); */
     
      $scope.loadMore = function() {
          
