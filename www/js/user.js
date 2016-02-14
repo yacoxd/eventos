@@ -1,7 +1,7 @@
 angular.module('events.user', [])
 	.factory('User', function($http,  $cookieStore, $rootScope) {
 
-		var apiUrl = 'http://localhost/eventos/api/users/user';
+		var apiUrl = 'http://yacoxd.com/eventos/api/users/user';
   
   		var loggedIn = false;
 

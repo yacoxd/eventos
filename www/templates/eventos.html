@@ -8,17 +8,17 @@
        <ion-list ng-repeat="event in events">
         <div class="list card">     
                 <div class="item event-title">
-                    <h2>{{event.info.ev_title}}</h2>
+                    <h2><strong>{{event.info.ev_title}}</strong></h2>
                     <h3>{{event.date}} <i class="icon ion-clock time-icon"></i></h3>
                 </div>
 
             <div class="item item-image item-body">
-                <img src="{{event.image[0]}}">
+                <img ng-src="{{event.image[0]}}" err-src="http://yacoxd.com/eventos/uploads/placeholder.png">
                 <p>
                 {{event.info.ev_short_description}}
                 </p>
             </div>
-            <div class="button button-block dark more-detail" ui-sref="detail">
+            <div class="button button-block dark more-detail" ui-sref="detail({event_id :{{event.info.ev_id}}})">
                 <div class="item-icon-left participants"><i class="icon ion-android-people"></i>{{event.total_assistants.total}}</div>
                 <div class="item-icon-right detail">Detalles<i class="icon ion-chevron-right"></i></div>
             </div>

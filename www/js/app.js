@@ -18,7 +18,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
   $stateProvider.state('menu.list', {
       url: '/list',
-      
       views: {
         'side-menu': {
           templateUrl: 'templates/eventos.html',
@@ -28,7 +27,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     });
     
       $stateProvider.state('detail', {
-        url: '/detail',
+        url: '/detail:event_id',
         templateUrl: 'templates/detail.html',
         controller: 'DetailCtrl'
     }); 
@@ -63,23 +62,36 @@ app.controller('LoginCtrl', function($scope, $state, $ionicHistory, $ionicPopup,
 
 });
 
-app.controller('DetailCtrl', function($scope, $cookieStore, $http) {
+app.controller('DetailCtrl', function($scope, $cookieStore, $stateParams,$ionicPopup,  $http) {
      
     
-    
-    
-    
+     var event = $stateParams.event_id; //getting fooVal
+     $scope.event_info = [];
+     var apiUrl = 'http://yacoxd.com/eventos/api/events/event/id/' + event;
+     
+     $http.get(apiUrl)
+              .success(function(response){
+                  $scope.event_info = response;
+            }).error(function(){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Ops!',
+                    template: 'Evento incorrecto'
+                });
+                alertPopup.then();
+            }).finally(function(){
+              
+            });
 });
 
 app.controller('ListCtrl', function($scope, $cookieStore, $http) {
     $scope.events = [];
-    var apiUrl = 'http://localhost/eventos/api/events/all_events';
+    var apiUrl = 'http://yacoxd.com/eventos/api/events/all_events';
     
      $scope.loadMore = function() {
          
          if($scope.events.length > 0){
             var after = $scope.events[$scope.events.length -1].info.ev_id;
-            apiUrl = 'http://localhost/eventos/api/events/all_events/after/' + after;
+            apiUrl = 'http://yacoxd.com/eventos/api/events/all_events/after/' + after;
           }
                          
             $http.get(apiUrl)
@@ -96,7 +108,7 @@ app.controller('ListCtrl', function($scope, $cookieStore, $http) {
          
          if($scope.events.length > 0){
             var before = $scope.events[0].info.ev_id;
-            apiUrl = 'http://localhost/eventos/api/events/all_events/before/' + before;
+            apiUrl = 'http://yacoxd.com/eventos/api/events/all_events/before/' + before;
           }
                          
           $http.get(apiUrl)
@@ -118,6 +130,25 @@ app.controller('ListCtrl', function($scope, $cookieStore, $http) {
     
     
     
+});
+
+app.directive('errSrc', function() {
+  return {
+    link: function(scope, element, attrs) {
+
+      scope.$watch(function() {
+          return attrs['ngSrc'];
+        }, function (value) {
+          if (!value) {
+            element.attr('src', attrs.errSrc);  
+          }
+      });
+
+      element.bind('error', function() {
+        element.attr('src', attrs.errSrc);
+      });
+    }
+  }
 });
 
 app.run(function($rootScope, $state, $ionicPlatform, $cookieStore, $http, User) {
