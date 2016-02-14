@@ -18,6 +18,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
   $stateProvider.state('menu.list', {
       url: '/list',
+      cache: false,
       views: {
         'side-menu': {
           templateUrl: 'templates/eventos.html',
@@ -29,7 +30,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
       $stateProvider.state('detail', {
         url: '/detail:event_id',
         templateUrl: 'templates/detail.html',
-        controller: 'DetailCtrl'
+        controller: 'DetailCtrl',
+        cache: false,
     }); 
 
   
@@ -62,7 +64,7 @@ app.controller('LoginCtrl', function($scope, $state, $ionicHistory, $ionicPopup,
 
 });
 
-app.controller('DetailCtrl', function($scope, $cookieStore, $stateParams,$ionicPopup,  $http) {
+app.controller('DetailCtrl', function($scope, $cookieStore, $stateParams,$ionicPopup, $state, $http) {
      
     
      var event = $stateParams.event_id; //getting fooVal
@@ -80,7 +82,56 @@ app.controller('DetailCtrl', function($scope, $cookieStore, $stateParams,$ionicP
                 alertPopup.then();
             }).finally(function(){
               
+     });
+     
+     // Triggered on a button click, or some other target
+        $scope.showPopup = function() {
+        $scope.data = {};
+
+            var myPopup = $ionicPopup.show({
+                template: '<input type="number" ng-model="data.cant" >',
+                title: 'Yeaah!! Ingresa con cuantas personas iras al evento.',
+                subTitle: 'Ingresa solo números enteros',
+                scope: $scope,
+                buttons: [
+                { text: 'Cancelar' },
+                {
+                    text: '<b>Guardar</b>',
+                    type: 'button-dark',
+                    onTap: function(e) {
+                        
+                    console.log($scope.data.cant);
+                        
+                        if (angular.isNumber($scope.data.cant)) {
+                            
+                            var apiURL =  'http://yacoxd.com/eventos/api/events/go_event';
+                            
+                            $http.post(apiURL, {cant: $scope.data.cant, event_id: event })
+                            .success(function(response){
+                                var alertPopupMsg = $ionicPopup.alert({
+                                    title: 'Información',
+                                    template: 'Se envio la informción correctamente.'
+                                    });
+                                    alertPopupMsg.then();
+                            }).finally(function(){
+                                
+                                $state.go($state.current, {}, {reload: true});    
+                                
+                                });
+                        } else {
+                            var alertPopupMsg = $ionicPopup.alert({
+                                title: 'Ops!',
+                                template: 'Ingresa una cantidad valida.'
+                            });
+                            alertPopupMsg.then();
+                            e.preventDefault();
+                        }
+                    }
+                }
+                ]
             });
+        }
+     
 });
 
 app.controller('ListCtrl', function($scope, $cookieStore, $http) {
