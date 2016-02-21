@@ -1,0 +1,49 @@
+<ion-view title="Perfil" hide-back-button ="false">
+     <ion-nav-bar class="bar-stable bar-dark">
+        <ion-nav-back-button></ion-nav-back-button>
+      </ion-nav-bar>
+    <ion-content overflow-scroll="true" padding="true" class="has-header">
+        <div style="text-align:center;">
+            <img ng-src="http://yacoxd.com/eventos/uploads/users/{{globals.currentUser.image}}" err-src="http://yacoxd.com/eventos/uploads/users/default.png" width="100%" height="auto">
+        </div>
+        <form class="list" >
+            
+            <label class="item item-input" name="nombres">
+                <span class="input-label">Nombres</span>
+                <input type="text" placeholder="" ng-model="data.first_name">
+            </label>
+            <label class="item item-input" name="apellidos">
+                <span class="input-label">Apellidos</span>
+                <input type="text" placeholder="" ng-model="data.last_name">
+            </label>
+            <label class="item item-input" name="email">
+                <span class="input-label">Email</span>
+                <input type="email" placeholder="" ng-model="data.email">
+            </label>
+            <label class="item item-input" name="phone">
+                <span class="input-label">Teléfono</span>
+                <input type="tel" placeholder="" ng-model="data.phone">
+            </label>
+            <label class="item item-input" name="fechanac">
+                <span class="input-label">Fec. Nacimiento</span>
+                <input type="date" placeholder=""  ng-model="data.date">
+            </label>
+            <label class="item item-input" name="fechanac">
+                <span class="input-label">Contraseña</span>
+                <input type="password" placeholder=""  ng-model="data.pwd">
+            </label>
+            <span class="input-label">Sexo</span>
+                
+            <ion-radio ng-repeat="item in sexList"
+                        ng-value="item.value"
+                        ng-model="data.sex">
+                {{ item.text }}
+            </ion-radio>
+                
+            <button class="button button-dark button-block icon-left ion-android-contact" ng-click="save()" >Guardar</button>
+        </form>
+    </ion-content>
+</ion-view>
+
+
+

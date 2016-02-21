@@ -27,19 +27,127 @@ app.config(function($stateProvider, $urlRouterProvider) {
       }
     });
     
-      $stateProvider.state('detail', {
+    $stateProvider.state('detail', {
         url: '/detail:event_id',
         templateUrl: 'templates/detail.html',
         controller: 'DetailCtrl',
         cache: false,
     }); 
+    
+    $stateProvider.state('profile', {
+        url: '/profile',
+        templateUrl: 'templates/profile.html',
+        controller: 'ProfileCtrl',
+        cache: false,
+    });
+    
+    $stateProvider.state('register', {
+        url: '/register',
+        templateUrl: 'templates/register.html',
+        controller: 'RegisterCtrl',
+        cache: false,
+    });
 
+  $urlRouterProvider.otherwise('/side-menu/list');
   
-
-  $urlRouterProvider.otherwise('/login');
 });
 
-app.controller('LoginCtrl', function($scope, $state, $ionicHistory, $ionicPopup, User) {
+app.controller('ProfileCtrl', function($scope, $cookieStore, $rootScope, $ionicPopup, $filter, $state, $http) {
+    
+     var apiUrl = 'http://yacoxd.com/eventos/api/users/user';
+     var username = "";
+     
+     $scope.user_info = [];
+     
+     $scope.sexList = [
+        { text: "Masculino", value: "M" },
+        { text: "Femenino", value: "F" },
+    ];
+     
+     $http.get(apiUrl)
+              .success(function(response){
+                  console.log(response);
+                  $scope.user_info = response;
+                  $scope.data = {
+                        sex: response.us_gender,
+                        date: new Date(response.date_dob),
+                        first_name: response.us_first_name,
+                        last_name:response.us_last_name,
+                        phone: response.us_phone,
+                        email: response.us_email,
+                  };
+                  
+                  username = response.us_username;
+                  
+            }).error(function(){
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Ops!',
+                    template: 'No se pudo recuperar información de usuario'
+                });
+                alertPopup.then();
+            }).finally(function(){
+     });
+     
+     
+     $scope.save = function() {
+         
+         var apiPost = 'http://yacoxd.com/eventos/api/users/edit';
+         
+         $http.post(apiPost, {email: $scope.data.email,
+                              first_name: $scope.data.first_name,
+                              last_name: $scope.data.last_name,
+                              pwd: $scope.data.pwd,
+                              gender: $scope.data.sex,
+                              dob: $scope.data.date,
+                              phone: $scope.data.phone,
+                              }).success(function(response, code){
+                                  
+                                  console.log(code);
+                                  if (code == 200) {
+                                      if ($scope.data.pwd != undefined) {
+                                            var auth = btoa(username + ":" + $scope.data.pwd);
+                                            
+                                            $rootScope.globals.currentUser.authdata = auth;
+                                            $cookieStore.put('globals', $rootScope.globals);
+                                            $http.defaults.headers.common.Authorization = 'Basic ' + auth;
+                                        }
+                                        
+                                        var alertPopupMsg = $ionicPopup.alert({
+                                                title: 'Información',
+                                                template: 'Se envio la informción correctamente.'
+                                                });
+                                        alertPopupMsg.then();
+                                  } else {
+                                      
+                                      console.log(response);
+                                      
+                                      var alertPopupMsg2 = $ionicPopup.alert({
+                                                title: 'Información',
+                                                template: response.msg
+                                                });
+                                        alertPopupMsg2.then();
+                                  }
+                              
+                                  
+         }).error(function(response){
+             
+             var alertPopupMsg = $ionicPopup.alert({
+                                    title: 'Información',
+                                    template: response.msg
+                                    });
+              alertPopupMsg.then();
+             
+         }).finally(function(){
+              $state.go($state.current, {}, {reload: true});    
+         });
+         
+         
+     }
+    
+    
+});
+
+app.controller('LoginCtrl', function($scope, $state, $ionicHistory, $ionicPopup,$rootScope, $cookieStore,  User) {
     
   $scope.credentials = {
     user: '',
@@ -81,7 +189,6 @@ app.controller('DetailCtrl', function($scope, $cookieStore, $stateParams,$ionicP
                 });
                 alertPopup.then();
             }).finally(function(){
-              
      });
      
      // Triggered on a button click, or some other target
@@ -134,7 +241,8 @@ app.controller('DetailCtrl', function($scope, $cookieStore, $stateParams,$ionicP
      
 });
 
-app.controller('ListCtrl', function($scope, $cookieStore, $http) {
+app.controller('ListCtrl', function($scope, $cookieStore, $rootScope, $state, User, $http) {
+    
     $scope.events = [];
     var apiUrl = 'http://yacoxd.com/eventos/api/events/all_events';
     
@@ -155,6 +263,14 @@ app.controller('ListCtrl', function($scope, $cookieStore, $http) {
             });
     };
     
+    $scope.clearSession = function() {
+        $rootScope.globals = {};
+        $cookieStore.remove('globals');
+        $http.defaults.headers.common.Authorization = 'Basic ';
+        User.isLoggedSet(false);
+        $state.go($state.current, {}, {reload: true});
+    }
+    
     $scope.doRefresh = function() {
          
          if($scope.events.length > 0){
@@ -173,13 +289,6 @@ app.controller('ListCtrl', function($scope, $cookieStore, $http) {
               $scope.$broadcast('scroll.infiniteScrollComplete');
             });
     };
-    
-    /*$scope.$on('$stateChangeSuccess', function() {
-        $scope.loadMore();
-    }); */
-    
-    
-    
     
 });
 
@@ -206,14 +315,17 @@ app.run(function($rootScope, $state, $ionicPlatform, $cookieStore, $http, User) 
     
   $rootScope.globals = $cookieStore.get('globals') || {};
   if ($rootScope.globals.currentUser) {
-         $http.defaults.headers.common.Authorization = 'Basic ' + $rootScope.globals.currentUser.authdata;
+        User.isLoggedSet(true);
+        $http.defaults.headers.common.Authorization = 'Basic ' + $rootScope.globals.currentUser.authdata;
+        event.preventDefault();
   }
     
   $rootScope.$on('$stateChangeStart', function(event, toState) {
     if (!User.isLoggedIn() && toState.name !== 'login') {
       event.preventDefault();
       $state.go('login');
-    }
+    } 
+  
   });
 
   $ionicPlatform.ready(function() {

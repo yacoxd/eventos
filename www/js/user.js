@@ -36,6 +36,11 @@ angular.module('events.user', [])
 
 			isLoggedIn: function() {
 				return loggedIn;
+			},
+            
+            isLoggedSet: function(val) {
+                loggedIn = val;
+				return true;
 			}
 
 		};

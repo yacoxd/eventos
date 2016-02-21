@@ -12,7 +12,7 @@
         <ion-header-bar class="bar-stable bar-dark">
             <div class="title">Menu</div>
         </ion-header-bar>
-        <ion-content padding="false" class="side-menu-left has-header" <="" ion-content="">
+        <ion-content padding="false" class="side-menu-left has-header" ng-controller="ListCtrl" <="" ion-content="">
             <ion-list>
                 <ion-item class="item-thumbnail-left item-avatar">
                     <img ng-src="http://yacoxd.com/eventos/uploads/users/{{globals.currentUser.image}}" err-src="http://yacoxd.com/eventos/uploads/users/default.png" >
@@ -20,8 +20,8 @@
                     <p>{{globals.currentUser.username}}</p>
                 </ion-item>
                 <ion-item ui-sref="menu.list" menu-close="" class="item-icon-left"><i class="icon ion-home"></i>Eventos</ion-item>
-                <ion-item class="item-icon-left"><i class="icon ion-person"></i>Perfil</ion-item>
-                <ion-item class="item-icon-left"><i class="icon ion-power"></i>Cerrar sesión</ion-item>
+                <ion-item class="item-icon-left" ui-sref="profile"><i class="icon ion-person"></i>Perfil</ion-item>
+                <ion-item class="item-icon-left" ng-click="clearSession()"><i class="icon ion-power"></i>Cerrar sesión</ion-item>
             </ion-list>
         </ion-content>
     </ion-side-menu>
