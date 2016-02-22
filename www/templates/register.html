@@ -1,11 +1,8 @@
-<ion-view title="Perfil" hide-back-button ="false">
+<ion-view title="Registro" hide-back-button ="false">
      <ion-nav-bar class="bar-stable bar-dark">
         <ion-nav-back-button></ion-nav-back-button>
       </ion-nav-bar>
     <ion-content overflow-scroll="true" padding="true" class="has-header">
-        <div style="text-align:center;">
-            <img ng-src="http://yacoxd.com/eventos/uploads/users/{{globals.currentUser.image}}" err-src="http://yacoxd.com/eventos/uploads/users/default.png" width="100%" height="auto">
-        </div>
         <form class="list" >
             
             <label class="item item-input" name="nombres">
@@ -20,17 +17,21 @@
                 <span class="input-label">Email</span>
                 <input type="email" placeholder="" ng-model="data.email">
             </label>
-            <label class="item item-input" name="phone">
-                <span class="input-label">Teléfono</span>
-                <input type="tel" placeholder="" ng-model="data.phone">
+            <label class="item item-input" name="username">
+                <span class="input-label">Usuario</span>
+                <input type="text" placeholder="" ng-model="data.username">
             </label>
-            <label class="item item-input" name="fechanac">
-                <span class="input-label">Fec. Nacimiento</span>
-                <input type="date" placeholder=""  ng-model="data.date">
+            <label class="item item-input" name="code">
+                <span class="input-label">Código Inv.</span>
+                <input type="text" placeholder="" ng-model="data.code">
             </label>
-            <label class="item item-input" name="fechanac">
+            <label class="item item-input" name="pwd">
                 <span class="input-label">Contraseña</span>
                 <input type="password" placeholder=""  ng-model="data.pwd">
+            </label>
+            <label class="item item-input" name="pwd2">
+                <span class="input-label">Repetir</span>
+                <input type="password" placeholder=""  ng-model="data.pwd2">
             </label>
             <span class="input-label">Sexo</span>
                 
